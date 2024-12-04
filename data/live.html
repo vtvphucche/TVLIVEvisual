@@ -1,0 +1,644 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="icon" type="image/x-icon" href="logo.png">
+    <script src="https://unpkg.com/konva@9.3.15/konva.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/mdui@2/mdui.css">
+    <script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script type="importmap">
+      {
+        "imports": {
+          "@material/web/": "https://esm.run/@material/web/"
+        }
+      }
+    </script>
+    <script type="module">
+      import '@material/web/all.js';
+      import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+  
+      document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+    </script>
+    <!-- Filled -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Outlined -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <!-- Rounded -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- Sharp -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <!-- Two Tone -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Two+Tone" rel="stylesheet">
+    <title>TV LIVE Visual</title>
+    <meta name="description" content="Our first page">
+    <meta name="keywords" content="html tutorial template">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @font-face {
+              font-family: 'Google Sans';
+              font-style: normal;
+              font-weight: 400;
+              font-display: swap;
+              src: url(/fonts/regular.woff2) format('woff2');
+              unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD
+        }
+
+        @font-face { font-family: MyriadPro; src: url('font/Myriad.otf'); } 
+        .displaytime {
+           font-family: MyriadPro;
+        }
+
+        @font-face { font-family: UTMHelve; src: url('font/UTM HelveBold.ttf'); } 
+        .prog {
+           font-family: UTMHelve;
+        }
+
+        .newprog {
+           font-family: UTMHelve;
+        }
+
+        body, p, h1, h2, h3, span, mdui-top-app-bar-title {
+          font-family: Google Sans;
+        }
+
+        [icon], [name], [end-icon], md-icon, mdui-icon {
+          font-family: Material Symbols Outlined;
+        }
+    </style>
+</head>
+
+<body>
+    <mdui-layout style="background-color: #ffffff; margin: 0;">
+    
+    <mdui-navigation-drawer close-on-esc close-on-overlay-click class="drawer">
+      <mdui-button-icon id="closeBar" icon="menu_open--outlined"></mdui-button-icon>
+      <mdui-list>
+        <mdui-list-item rounded active>
+          <md-icon slot="icon">home</md-icon>
+          Home
+        </mdui-list-item>
+        <mdui-list-item rounded href="guide_live.html">
+          <md-icon slot="icon">help</md-icon>
+          Trợ giúp
+        </mdui-list-item>
+      </mdui-list>
+      
+    </mdui-navigation-drawer>
+      <mdui-layout-main class="example-layout-main" style="height: 97vh; margin-left: 30px; margin: 0;">
+        <mdui-button-icon id="openBar" icon="menu"></mdui-button-icon>
+        <br><br>
+        <iframe id="workCanvas" src="canvas_live_channel_TestDemo.html" style="border: none; width: 100vh; height: 92vh; width: 1360px; height: 768px; pointer-events: none; cursor: none;">Đang tải, vui lòng đợi</iframe>
+        <br>
+        <div class="controling-card">
+          <mdui-tooltip content="Tắt đồng hồ" placement="bottom"><mdui-button-icon selectable icon="timer_off--outlined" selected-icon="timer_off" variant="outlined" id="disableClock"></mdui-button-icon></mdui-tooltip>
+          <mdui-tooltip content="Tắt tên CT" placement="bottom"><mdui-button-icon selectable icon="format_strikethrough--outlined" selected-icon="format_strikethrough" variant="outlined" id="disablePrg"></mdui-button-icon></mdui-tooltip>
+          <mdui-tooltip content="Hiện chữ Trực tiếp" placement="bottom"><mdui-button-icon selectable icon="text_fields" selected-icon="text_fields" variant="outlined" id="showLivetxt"></mdui-button-icon></mdui-tooltip>
+          <mdui-tooltip content="Hiện chữ Trực tiếp bên phải" placement="bottom"><mdui-button-icon selectable icon="text_fields" selected-icon="text_fields" variant="outlined" id="showRlivetxt"></mdui-button-icon></mdui-tooltip>
+          <mdui-tooltip content="Bật/tắt logo bên phải" placement="bottom"><mdui-button-icon selectable icon="align_horizontal_right" selected-icon="align_horizontal_right" variant="outlined" id="showRightlogo"></mdui-button-icon></mdui-tooltip>
+          <div>
+            <md-filled-button id="changeLogo" style="font-family: Google Sans; --md-sys-color-primary: #3b4fff;" trailing-icon>Thay logo</md-filled-button>
+            <label for="resizeLogo" style="padding: 20px;">
+              <md-slider id="resizeLogo" style="--md-sys-color-primary: #3b4fff; width: 50px;" value="50"></md-slider>
+              <md-outlined-text-field id="resizeIndicator" value="110" suffix-text="px" style="margin-left: 20px;">
+              </md-outlined-text-field>
+            </label>
+          
+          </div>
+          <md-filled-button id="changeBg" style="font-family: Google Sans; border-radius: 4px; --md-sys-color-primary: #3b4fff;">Thay nền ảnh hoặc video</md-filled-button>
+          <mdui-tooltip content="Tạm dừng/phát video" placement="bottom"><mdui-button-icon icon="play_arrow--outlined" variant="outlined" id="playpausevid"></mdui-button-icon></mdui-tooltip>
+          <mdui-tooltip content="Tắt logo" placement="bottom">
+            <mdui-button-icon selectable icon="close--outlined" selected-icon="close" variant="outlined" id="disableLogo"></mdui-button-icon>
+          </mdui-tooltip>
+          <mdui-tooltip content="Tắt logo fade in/out" placement="bottom">
+            <mdui-button-icon selectable icon="close--outlined" selected-icon="close" variant="outlined" id="disableLogoFadeinout"></mdui-button-icon>
+          </mdui-tooltip>
+          <mdui-text-field variant="outlined" type="text" label="Tên CT 1" id="fpEdit" value="KHÁM PHÁ THẾ GIỚI" style="font-family: Google Sans; height: 40px; width: 200px;"></mdui-text-field>
+          <mdui-text-field variant="outlined" type="text" label="Tên CT 2" id="spEdit" value="MẬT ONG HẢO HẠNG" style="font-family: Google Sans; height: 40px; width: 200px;"></mdui-text-field>
+          <md-filled-button style="font-family: Google Sans; --md-sys-color-primary: #3b4fff; border-radius: 4px;" id="updateButton">Cập nhật tên CT</md-filled-button>
+          <mdui-tooltip trigger="click" content="&nbsp;&lt;--Nếu bạn không thể nhập phím dấu cách được, vui lòng sao chép dấu và dán vào đây" placement="right">
+          <md-icon-button>
+            <md-icon>info</md-icon>
+          </md-icon-button>
+        </div>
+      </mdui-layout-main>
+    </mdui-layout>
+
+    <mdui-dialog headline="Báo cáo lỗi" close-on-overlay-click close-on-esc class="bug-report">
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdDP6eDSvO5-HtCiHls6d2HlWXwSkqo-wggGGG3r5j4Sn6Rgw/viewform?embedded=true" width="400" height="500" frameborder="0" marginheight="0" marginwidth="0">Đang tải…</iframe>
+    </mdui-dialog>
+
+    <style>
+      .controling-card {
+        box-shadow: 0px 5px 16px -2px rgba(0,0,0,0.2);
+        padding: 15px;
+        border-radius: 5px;
+        margin-right: 10px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .top-app-bar {
+        /* From https://css.glass */
+        background: rgba(255, 255, 255, 0.13);
+        border-radius: 16px;
+        backdrop-filter: blur(16.4px);
+        -webkit-backdrop-filter: blur(16.4px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.46);
+      }
+
+      #changeLogo {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 0px;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 0px;
+      }
+
+      #changeLogosets {
+        border-top-left-radius: 0px;
+        border-top-right-radius: 4px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 4px;
+        height: 1px;
+      }
+    </style>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const dialog = document.querySelector('.bug-report');
+        const openButton = document.querySelector('.bugbutton');
+
+        if (openButton) {
+          openButton.addEventListener("click", () => {
+            if (dialog) {
+              dialog.open = true;
+            }
+          });
+        } else {
+          console.error('Open button not found');
+        }
+
+        if (!dialog) {
+          console.error('Dialog not found');
+        }
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const openButton = document.getElementById('openBar');
+        const closeButton = document.getElementById('closeBar');
+        const drawer = document.querySelector('.drawer');
+
+        if (openButton && closeButton && drawer) {
+          openButton.addEventListener("click", () => {
+            openButton.style.display = 'none';
+            closeButton.style.display = 'block';
+            drawer.open = true; // Set the drawer to open
+          });
+
+          closeButton.addEventListener("click", () => {
+            closeButton.style.display = 'none';
+            openButton.style.display = 'block';
+            drawer.open = false; // Set the drawer to close
+          });
+        } else {
+          console.error('One or more elements not found');
+        }
+      });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const workCanvas = document.getElementById('workCanvas');
+
+            // Function to execute code within the iframe
+            const executeInIframe = (func) => {
+                const iframeWindow = workCanvas.contentWindow || workCanvas.contentDocument.defaultView;
+                func(iframeWindow);
+            };
+
+            // Function to update the display of elements based on button states
+            const updateClockAndPrgDisplay = () => {
+                executeInIframe((iframeWindow) => {
+                    const clock = iframeWindow.document.querySelector('.clock');
+                    const prgname = iframeWindow.document.querySelector('.prgname');
+                    const live = iframeWindow.document.querySelector('.live');
+                    const indicator = iframeWindow.document.querySelector('.indicator'); // Select the indicator
+
+                    // Check if #disableClock is selected
+                    const disableClockSelected = document.getElementById('disableClock').hasAttribute('selected');
+                    if (disableClockSelected) {
+                        if (indicator) indicator.style.display = 'none'; // Hide the indicator
+                    } else {
+                        if (indicator) indicator.style.display = 'block'; // Show the indicator if not selected
+                    }
+
+                    // Check if #disablePrg is selected
+                    const disablePrgSelected = document.getElementById('disablePrg').hasAttribute('selected');
+                    if (disablePrgSelected) {
+                        if (prgname) {
+                            prgname.style.transition = 'opacity 0.5s';
+                            prgname.style.opacity = 0; // Fade out
+                            setTimeout(() => {
+                                prgname.style.display = 'none'; // Hide after fading out
+                            }, 500); // Match the duration of the fade-out
+                        }
+                    } else {
+                        if (prgname) {
+                            prgname.style.display = 'block'; // Show prgname if not selected
+                            prgname.style.opacity = 1; // Ensure it's fully visible
+                        }
+                    }
+
+                    // Check if #showLivetxt is selected
+                    const showLivetxtSelected = document.getElementById('showLivetxt').hasAttribute('selected');
+                    if (showLivetxtSelected) {
+                        if (live) live.style.display = 'block'; // Show live text
+                    } else {
+                        if (live) live.style.display = 'none'; // Hide live text
+                    }
+                });
+            };
+
+            // Add event listeners to the buttons
+            document.getElementById('disableClock').addEventListener('click', updateClockAndPrgDisplay);
+            document.getElementById('disablePrg').addEventListener('click', updateClockAndPrgDisplay);
+            document.getElementById('showLivetxt').addEventListener('click', updateClockAndPrgDisplay);
+
+            // Initial check on load
+            updateClockAndPrgDisplay();
+        });
+    </script>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+          const workCanvas = document.getElementById('workCanvas');
+          const showRightLogo = document.getElementById('showRightlogo');
+
+          // Function to execute code within the iframe
+          const executeInIframe = (func) => {
+              const iframeWindow = workCanvas.contentWindow || workCanvas.contentDocument.defaultView;
+              func(iframeWindow);
+          };
+
+          // Function to check the selected state of the button and update iframe elements
+          const checkAndUpdateLogos = (iframeWindow) => {
+              const defaultLogoComp = iframeWindow.document.querySelector('.defaultlogo-comp');
+              const rightComponents = iframeWindow.document.querySelector('.right-components');
+
+              if (!defaultLogoComp || !rightComponents) {
+                  console.error('One or more elements not found in iframe.');
+                  return;
+              }
+
+              if (showRightLogo.hasAttribute('selected')) {
+                  console.log('Show Right Logo is selected. Hiding default logo.');
+                  defaultLogoComp.classList.add('fade-out');
+                  setTimeout(() => {
+                      defaultLogoComp.style.display = 'none';
+                      rightComponents.style.display = 'block';
+                  }, 500); // Wait for fade-out to complete
+              } else {
+                  console.log('Show Right Logo is not selected. Hiding right components.');
+                  rightComponents.classList.add('fade-out');
+                  setTimeout(() => {
+                      rightComponents.style.display = 'none';
+                      defaultLogoComp.style.display = 'block';
+                  }, 500); // Wait for fade-out to complete
+              }
+          };
+
+          // Check the button state and update iframe on load
+          workCanvas.addEventListener('load', () => {
+              executeInIframe(checkAndUpdateLogos);
+          });
+
+          // Optionally, you can also check and update whenever the button is clicked
+          showRightLogo.addEventListener('click', () => {
+              executeInIframe(checkAndUpdateLogos);
+          });
+      });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const workCanvas = document.getElementById('workCanvas');
+            const showRlivetxt = document.getElementById('showRlivetxt');
+
+            // Function to execute code within the iframe
+            const executeInIframe = (func) => {
+                const iframeWindow = workCanvas.contentWindow || workCanvas.contentDocument.defaultView;
+                func(iframeWindow);
+            };
+
+            // Function to check the selected state of the button and update iframe elements
+            const checkAndUpdateLiveText = (iframeWindow) => {
+                const rightLive = iframeWindow.document.querySelector('.right-live');
+
+                if (!rightLive) {
+                    console.error('Element .right-live not found in iframe.');
+                    return;
+                }
+
+                if (showRlivetxt.hasAttribute('selected')) {
+                    console.log('Show Live Text is selected. Displaying right-live.');
+                    rightLive.style.display = 'block'; // Show the element
+                } else {
+                    console.log('Show Live Text is not selected. Hiding right-live.');
+                    rightLive.style.display = 'none'; // Hide the element
+                }
+            };
+
+            // Check the button state and update iframe on load
+            workCanvas.addEventListener('load', () => {
+                executeInIframe(checkAndUpdateLiveText);
+            });
+
+            // Check and update whenever the button is clicked
+            showRlivetxt.addEventListener('click', () => {
+                executeInIframe(checkAndUpdateLiveText);
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const workCanvas = document.getElementById('workCanvas');
+            const changeLogoButton = document.getElementById('changeLogo');
+
+            // Function to execute code within the iframe
+            const executeInIframe = (func) => {
+                const iframeWindow = workCanvas.contentWindow || workCanvas.contentDocument.defaultView;
+                func(iframeWindow);
+            };
+
+            // Function to replace logo images in the iframe
+            const replaceLogos = (iframeWindow, imageSrc) => {
+                const logo = iframeWindow.document.querySelector('.logo');
+                const rightLogo = iframeWindow.document.querySelector('.right-logo');
+
+                if (logo) {
+                    logo.src = imageSrc; // Set the new logo source
+                } else {
+                    console.error('Element .logo not found in iframe.');
+                }
+
+                if (rightLogo) {
+                    rightLogo.src = imageSrc; // Set the new right logo source
+                } else {
+                    console.error('Element .right-logo not found in iframe.');
+                }
+            };
+
+            // Handle logo change button click
+            changeLogoButton.addEventListener('click', () => {
+                // Create an input element for file upload
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/png, image/jpeg, image/webp'; // Accept specific image formats
+
+                input.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+
+                        reader.onload = (e) => {
+                            const imageSrc = e.target.result; // Get the uploaded image data URL
+                            executeInIframe((iframeWindow) => replaceLogos(iframeWindow, imageSrc));
+                        };
+
+                        reader.readAsDataURL(file); // Read the file as data URL
+                    }
+                });
+
+                input.click(); // Trigger the file input dialog
+            });
+        });
+    </script>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+          const resizeLogoSlider = document.getElementById('resizeLogo');
+          const resizeIndicator = document.getElementById('resizeIndicator');
+          const workCanvas = document.getElementById('workCanvas');
+  
+          // Set initial values
+          resizeLogoSlider.min = 0;
+          resizeLogoSlider.max = 100;
+          resizeLogoSlider.value = 50; // Initial value for the slider
+          resizeIndicator.value = 110; // Corresponding initial value for the text box
+  
+          // Function to execute code within the iframe
+          const executeInIframe = (func) => {
+              const iframeWindow = workCanvas.contentWindow || workCanvas.contentDocument.defaultView;
+              func(iframeWindow);
+          };
+  
+          // Update the indicator and logo width based on the slider value
+          const updateValues = () => {
+              const sliderValue = resizeLogoSlider.value;
+              resizeIndicator.value = parseInt(sliderValue) + 60; // Calculate the value for the text box (50 + 60 = 110)
+  
+              // Update the logo width in the iframe
+              executeInIframe((iframeWindow) => {
+                  const logo = iframeWindow.document.querySelector('.logo');
+                  if (logo) {
+                      logo.style.width = `${resizeIndicator.value}px`; // Set the width of the logo
+                  } else {
+                      console.error('Element .logo not found in iframe.');
+                  }
+              });
+          };
+  
+          // Event listener for the slider
+          resizeLogoSlider.addEventListener('input', updateValues);
+  
+          // Initial update on load
+          updateValues();
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const workCanvas = document.getElementById('workCanvas');
+        const playPauseButton = document.getElementById('playpausevid');
+
+        // Function to execute code within the iframe
+        const executeInIframe = (func) => {
+            const iframeWindow = workCanvas.contentWindow || workCanvas.contentDocument.defaultView;
+            func(iframeWindow);
+        };
+
+        // Function to toggle play and pause
+        const togglePlayPause = (iframeWindow) => {
+            const video = iframeWindow.document.querySelector('.vidbg'); // Select the video with class .vidbg
+            if (video) {
+                if (video.paused) {
+                    video.play();
+                    playPauseButton.setAttribute('icon', 'pause--outlined'); // Change to pause icon
+                } else {
+                    video.pause();
+                    playPauseButton.setAttribute('icon', 'play_arrow--outlined'); // Change to play icon
+                }
+            } else {
+                console.error('Video element with class .vidbg not found in iframe.');
+            }
+        };
+
+        // Add event listener to the play/pause button
+        playPauseButton.addEventListener('click', () => {
+            executeInIframe(togglePlayPause);
+        });
+    });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const changeBgButton = document.getElementById('changeBg');
+        const workCanvas = document.getElementById('workCanvas');
+
+        // Function to execute code within the iframe
+        const executeInIframe = (func) => {
+          const iframeWindow = workCanvas.contentWindow || workCanvas.contentDocument.defaultView;
+          func(iframeWindow);
+        };
+
+        // Handle background change button click
+        changeBgButton.addEventListener('click', () => {
+          // Create an input element for file upload
+          const input = document.createElement('input');
+          input.type = 'file';
+          input.accept = 'image/*, video/*'; // Accept both image and video formats
+
+          input.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+
+              reader.onload = (e) => {
+                const fileSrc = e.target.result; // Get the uploaded file data URL
+                executeInIframe((iframeWindow) => {
+                  const channelMain = iframeWindow.document.querySelector('.channelmain');
+                  const videoElement = iframeWindow.document.querySelector('.vidbg');
+
+                  // Check if the uploaded file is an image
+                  if (file.type.startsWith('image/')) {
+                    // Set the background image of .channelmain
+                    if (channelMain) {
+                      channelMain.style.backgroundImage = `url(${fileSrc})`;
+                      channelMain.style.backgroundSize = 'cover'; // Optional: Cover the entire area
+                      channelMain.style.backgroundPosition = 'center'; // Optional: Center the image
+                    }
+                    // Remove video background if any
+                    if (videoElement) {
+                      videoElement.style.display = 'none'; // Hide video if it exists
+                    }
+                  }
+                  // Check if the uploaded file is a video
+                  else if (file.type.startsWith('video/')) {
+                    // Remove the background image of .channelmain
+                    if (channelMain) {
+                      channelMain.style.backgroundImage = 'none';
+                    }
+                    // Set the video source to the uploaded video
+                    if (videoElement) {
+                      videoElement.src = fileSrc; // Set the new video source
+                      videoElement.style.display = 'block'; // Show the video
+                    }
+                  }
+                });
+              };
+
+              reader.readAsDataURL(file); // Read the file as data URL
+            }
+          });
+
+          input.click(); // Trigger the file input dialog
+        });
+      });
+    </script>
+
+    <script>
+      document.getElementById('updateButton').addEventListener('click', function() {
+          event.preventDefault()
+
+          // Get the values from the input fields
+          const fpValue = document.getElementById('fpEdit').value;
+          const spValue = document.getElementById('spEdit').value;
+
+          // Get the iframe element
+          const iframe = document.getElementById('workCanvas');
+
+          // Access the content of the iframe
+          const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+          // Update the #fp and #sp elements in the iframe
+          iframeDocument.getElementById('fp').textContent = fpValue;
+          iframeDocument.getElementById('sp').textContent = spValue;
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const workCanvas = document.getElementById('workCanvas');
+        const disableLogoButton = document.getElementById('disableLogo');
+        const disableLogoFadeinoutButton = document.getElementById('disableLogoFadeinout');
+
+        // Function to execute code within the iframe
+        const executeInIframe = (func) => {
+            const iframeWindow = workCanvas.contentWindow || workCanvas.contentDocument.defaultView;
+            func(iframeWindow);
+        };
+
+        // Function to update logo display based on button states
+        const updateLogoDisplay = (iframeWindow) => {
+            const logo = iframeWindow.document.querySelector('.logo');
+
+            if (!logo) {
+                console.error('Element .logo not found in iframe.');
+                return;
+            }
+
+            // Check if #disableLogo is selected
+            const disableLogoSelected = disableLogoButton.hasAttribute('selected');
+            if (disableLogoSelected) {
+                logo.style.display = 'none'; // Hide logo immediately
+            } else {
+                logo.style.display = 'block'; // Show logo if not selected
+            }
+
+            // Check if #disableLogoFadeinout is selected
+            const disableLogoFadeinoutSelected = disableLogoFadeinoutButton.hasAttribute('selected');
+            if (disableLogoFadeinoutSelected) {
+                logo.style.transition = 'opacity 0.5s'; // Set transition for fade effect
+                logo.style.opacity = 0; // Fade out
+                setTimeout(() => {
+                    logo.style.display = 'none'; // Hide after fading out
+                }, 500); // Match the duration of the fade-out
+            } else {
+                logo.style.display = 'block'; // Show logo if not selected
+                logo.style.opacity = 1; // Ensure it's fully visible
+            }
+        };
+
+        // Function to handle updates
+        const handleUpdate = () => {
+            executeInIframe(updateLogoDisplay);
+        };
+
+        // Add event listeners to the buttons
+        disableLogoButton.addEventListener('click', handleUpdate);
+        disableLogoFadeinoutButton.addEventListener('click', handleUpdate);
+
+        // Initial check on load
+        workCanvas.addEventListener('load', () => {
+            executeInIframe(updateLogoDisplay);
+        });
+
+        // Ensure the logo display is updated after the iframe is loaded
+        workCanvas.addEventListener('load', handleUpdate);
+    });
+    </script>
+</body>
+</html>

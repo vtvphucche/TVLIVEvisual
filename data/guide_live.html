@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="icon" type="image/x-icon" href="logo.png">
+    <script src="https://unpkg.com/konva@9.3.15/konva.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/mdui@2/mdui.css">
+    <script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script type="importmap">
+      {
+        "imports": {
+          "@material/web/": "https://esm.run/@material/web/"
+        }
+      }
+    </script>
+    <script type="module">
+      import '@material/web/all.js';
+      import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+  
+      document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+    </script>
+    <!-- Filled -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Outlined -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <!-- Rounded -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- Sharp -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <!-- Two Tone -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Two+Tone" rel="stylesheet">
+    <title>Hướng dẫn</title>
+    <meta name="description" content="Our first page">
+    <meta name="keywords" content="html tutorial template">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @font-face {
+              font-family: 'Google Sans';
+              font-style: normal;
+              font-weight: 400;
+              font-display: swap;
+              src: url(/fonts/regular.woff2) format('woff2');
+              unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD
+        }
+
+        @font-face { font-family: MyriadPro; src: url('font/Myriad.otf'); } 
+        .displaytime {
+           font-family: MyriadPro;
+        }
+
+        @font-face { font-family: UTMHelve; src: url('font/UTM HelveBold.ttf'); } 
+        .prog {
+           font-family: UTMHelve;
+        }
+
+        .newprog {
+           font-family: UTMHelve;
+        }
+
+        body, p, h1, h2, h3, span, mdui-top-app-bar-title {
+          font-family: Google Sans;
+        }
+
+        [icon], [name], [end-icon], md-icon, mdui-icon {
+          font-family: Material Symbols Outlined;
+        }
+    </style>
+</head>
+
+<body>
+    <mdui-layout style="background-color: #ffffff;">
+    <mdui-top-app-bar class="top-app-bar" style="border-top-right-radius: 10px;">
+      <mdui-button-icon id="openBar" icon="menu"></mdui-button-icon>
+      <mdui-button-icon id="closeBar" icon="menu_open--outlined" style="display: none;"></mdui-button-icon>
+      <mdui-top-app-bar-title style="vertical-align: middle;">
+        Phục chế kênh trực tiếp 
+        <span style="font-size: 65%; background-color: #e2d3ff; border-radius: 10px; cursor: default; margin-left: 5px;">
+          <span style="margin-left: 5px; margin-right: 5px;">BETA</span>
+        </span>
+      </mdui-top-app-bar-title>
+      <div style="flex-grow: 1; gap: 10px;"></div>
+      <md-filled-button class="bugbutton">Báo cáo lỗi</md-filled-button>
+      <mdui-avatar src="Avatar.png"></mdui-avatar>
+    </mdui-top-app-bar>
+    
+    <mdui-navigation-drawer close-on-esc close-on-overlay-click open class="drawer">
+      <mdui-list>
+        <mdui-list-item rounded href="live.html">
+          <md-icon slot="icon">home</md-icon>
+          Home
+        </mdui-list-item>
+        <mdui-list-item rounded active>
+          <md-icon slot="icon">help</md-icon>
+          Trợ giúp
+        </mdui-list-item>
+      </mdui-list>
+      
+    </mdui-navigation-drawer>
+      <mdui-layout-main class="example-layout-main" style="height: 97vh; margin-left: 30px;">
+        <h1>Hướng dẫn sử dụng bộ tool tạo luồng kênh trực tiếp</h1>
+        <p>Đối với PC:
+          <br>
+          <ol>
+            <li>Tải và cài đặt OBS Studio</li>
+            <br>
+            <li>Cài đặt ứng dụng bộ tool này</li>
+            <br>
+            <li>Tạo một nguồn/Source mới, chọn Quay cửa sổ/Window Capture</li>
+            <br>
+            <li>Chọn TV LIVE Visual (Tắt thanh điều hướng trước bằng cách nhấn vào nút <mdui-icon name="menu"></mdui-icon>)</li>
+            <br>
+            <li>Điều chỉnh phóng to sao cho vừa với màn hình trong OBS Studio</li>
+            <br>
+            <li>Kết nối với tài khoản YouTube của bạn và bắt đầu trực tiếp.</li>
+          </ol>
+          <br>
+          Lưu ý: bạn nên để vừa với màn hình trong OBS Studio mà vẫn đảm bảo công cụ bên dưới.
+          <br>
+          Đối với Mobile: sẽ ra mắt sau
+        </p>
+      </mdui-layout-main>
+    </mdui-layout>
+
+    <mdui-dialog headline="Báo cáo lỗi" close-on-overlay-click close-on-esc class="bug-report">
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdDP6eDSvO5-HtCiHls6d2HlWXwSkqo-wggGGG3r5j4Sn6Rgw/viewform?embedded=true" width="400" height="500" frameborder="0" marginheight="0" marginwidth="0">Đang tải…</iframe>
+    </mdui-dialog>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const dialog = document.querySelector('.bug-report');
+        const openButton = document.querySelector('.bugbutton');
+
+        if (openButton) {
+          openButton.addEventListener("click", () => {
+            if (dialog) {
+              dialog.open = true;
+            }
+          });
+        } else {
+          console.error('Open button not found');
+        }
+
+        if (!dialog) {
+          console.error('Dialog not found');
+        }
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const openButton = document.getElementById('openBar');
+        const closeButton = document.getElementById('closeBar');
+        const drawer = document.querySelector('.drawer');
+
+        if (openButton && closeButton && drawer) {
+          openButton.addEventListener("click", () => {
+            openButton.style.display = 'none';
+            closeButton.style.display = 'block';
+            drawer.open = true; // Set the drawer to open
+          });
+
+          closeButton.addEventListener("click", () => {
+            closeButton.style.display = 'none';
+            openButton.style.display = 'block';
+            drawer.open = false; // Set the drawer to close
+          });
+        } else {
+          console.error('One or more elements not found');
+        }
+      });
+    </script>
+</body>
+</html>
